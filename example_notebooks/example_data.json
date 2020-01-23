@@ -1,0 +1,375 @@
+[
+  {
+    "super_loci": [
+      {
+        "is_fully_contained": true,
+        "transcripts": [
+          {
+            "is_fully_contained": true,
+            "features": [
+              {
+                "end": 400,
+                "score": null,
+                "is_plus_strand": true,
+                "start_is_biological_start": true,
+                "start": 0,
+                "phase": 0,
+                "is_fully_contained": true,
+                "given_name": "y1",
+                "id": 1,
+                "protein_id": null,
+                "type": "geenuff_transcript",
+                "end_is_biological_end": true,
+                "overlaps": true,
+                "source": "manual"
+              },
+              {
+                "end": 301,
+                "score": null,
+                "is_plus_strand": true,
+                "start_is_biological_start": true,
+                "start": 10,
+                "phase": 0,
+                "is_fully_contained": true,
+                "given_name": null,
+                "id": 2,
+                "protein_id": "y1.p",
+                "type": "geenuff_cds",
+                "end_is_biological_end": true,
+                "overlaps": true,
+                "source": "manual"
+              },
+              {
+                "end": 110,
+                "score": null,
+                "is_plus_strand": true,
+                "start_is_biological_start": true,
+                "start": 21,
+                "phase": 0,
+                "is_fully_contained": true,
+                "given_name": null,
+                "id": 3,
+                "protein_id": null,
+                "type": "geenuff_intron",
+                "end_is_biological_end": true,
+                "overlaps": true,
+                "source": "manual"
+              },
+              {
+                "end": 200,
+                "score": null,
+                "is_plus_strand": true,
+                "start_is_biological_start": true,
+                "start": 120,
+                "phase": 0,
+                "is_fully_contained": true,
+                "given_name": null,
+                "id": 4,
+                "protein_id": null,
+                "type": "geenuff_intron",
+                "end_is_biological_end": true,
+                "overlaps": true,
+                "source": "manual"
+              }
+            ],
+            "type": "mRNA",
+            "id": 1,
+            "overlaps": true,
+            "given_name": "y1"
+          },
+          {
+            "is_fully_contained": true,
+            "features": [
+              {
+                "end": 120,
+                "score": null,
+                "is_plus_strand": true,
+                "start_is_biological_start": false,
+                "start": 110,
+                "phase": 0,
+                "is_fully_contained": true,
+                "given_name": "z1",
+                "id": 5,
+                "protein_id": null,
+                "type": "geenuff_transcript",
+                "end_is_biological_end": false,
+                "overlaps": true,
+                "source": "manual"
+              },
+              {
+                "end": 120,
+                "score": null,
+                "is_plus_strand": true,
+                "start_is_biological_start": false,
+                "start": 110,
+                "phase": 0,
+                "is_fully_contained": true,
+                "given_name": null,
+                "id": 6,
+                "protein_id": "z1.p",
+                "type": "geenuff_cds",
+                "end_is_biological_end": false,
+                "overlaps": true,
+                "source": "manual"
+              }
+            ],
+            "type": "mRNA",
+            "id": 2,
+            "overlaps": true,
+            "given_name": "z1"
+          },
+          {
+            "is_fully_contained": true,
+            "features": [
+              {
+                "end": 120,
+                "score": null,
+                "is_plus_strand": true,
+                "start_is_biological_start": true,
+                "start": 0,
+                "phase": 0,
+                "is_fully_contained": true,
+                "given_name": "x1",
+                "id": 7,
+                "protein_id": null,
+                "type": "geenuff_transcript",
+                "end_is_biological_end": false,
+                "overlaps": true,
+                "source": "manual"
+              },
+              {
+                "end": 120,
+                "score": null,
+                "is_plus_strand": true,
+                "start_is_biological_start": true,
+                "start": 10,
+                "phase": 0,
+                "is_fully_contained": true,
+                "given_name": null,
+                "id": 8,
+                "protein_id": "x1.p",
+                "type": "geenuff_cds",
+                "end_is_biological_end": false,
+                "overlaps": true,
+                "source": "manual"
+              },
+              {
+                "end": 110,
+                "score": null,
+                "is_plus_strand": true,
+                "start_is_biological_start": true,
+                "start": 21,
+                "phase": 0,
+                "is_fully_contained": true,
+                "given_name": null,
+                "id": 9,
+                "protein_id": null,
+                "type": "geenuff_intron",
+                "end_is_biological_end": true,
+                "overlaps": true,
+                "source": "manual"
+              }
+            ],
+            "type": "mRNA",
+            "id": 3,
+            "overlaps": true,
+            "given_name": "x1"
+          }
+        ],
+        "type": "gene",
+        "id": 1,
+        "overlaps": true,
+        "given_name": "gene0"
+      },
+      {
+        "is_fully_contained": true,
+        "transcripts": [
+          {
+            "is_fully_contained": true,
+            "features": [
+              {
+                "end": 1400,
+                "score": null,
+                "is_plus_strand": true,
+                "start_is_biological_start": true,
+                "start": 1299,
+                "phase": 0,
+                "is_fully_contained": true,
+                "given_name": "y3",
+                "id": 10,
+                "protein_id": null,
+                "type": "geenuff_transcript",
+                "end_is_biological_end": true,
+                "overlaps": true,
+                "source": "manual"
+              }
+            ],
+            "type": "mRNA",
+            "id": 4,
+            "overlaps": true,
+            "given_name": "y3"
+          },
+          {
+            "is_fully_contained": true,
+            "features": [
+              {
+                "end": 1400,
+                "score": null,
+                "is_plus_strand": true,
+                "start_is_biological_start": true,
+                "start": 1199,
+                "phase": 0,
+                "is_fully_contained": true,
+                "given_name": "x3",
+                "id": 11,
+                "protein_id": null,
+                "type": "geenuff_transcript",
+                "end_is_biological_end": true,
+                "overlaps": true,
+                "source": "manual"
+              }
+            ],
+            "type": "mRNA",
+            "id": 5,
+            "overlaps": true,
+            "given_name": "x3"
+          }
+        ],
+        "type": "gene",
+        "id": 3,
+        "overlaps": true,
+        "given_name": "gene_non_coding"
+      },
+      {
+        "is_fully_contained": true,
+        "transcripts": [
+          {
+            "is_fully_contained": true,
+            "features": [
+              {
+                "end": 1800,
+                "score": null,
+                "is_plus_strand": true,
+                "start_is_biological_start": true,
+                "start": 1599,
+                "phase": 0,
+                "is_fully_contained": true,
+                "given_name": "x4",
+                "id": 12,
+                "protein_id": null,
+                "type": "geenuff_transcript",
+                "end_is_biological_end": true,
+                "overlaps": true,
+                "source": "manual"
+              },
+              {
+                "end": 1795,
+                "score": null,
+                "is_plus_strand": true,
+                "start_is_biological_start": true,
+                "start": 1610,
+                "phase": 0,
+                "is_fully_contained": true,
+                "given_name": null,
+                "id": 13,
+                "protein_id": "x4",
+                "type": "geenuff_cds",
+                "end_is_biological_end": true,
+                "overlaps": true,
+                "source": "manual"
+              },
+              {
+                "end": 1780,
+                "score": null,
+                "is_plus_strand": true,
+                "start_is_biological_start": true,
+                "start": 1700,
+                "phase": 0,
+                "is_fully_contained": true,
+                "given_name": null,
+                "id": 14,
+                "protein_id": null,
+                "type": "geenuff_intron",
+                "end_is_biological_end": true,
+                "overlaps": true,
+                "source": "manual"
+              }
+            ],
+            "type": "mRNA",
+            "id": 6,
+            "overlaps": true,
+            "given_name": "x4"
+          },
+          {
+            "is_fully_contained": true,
+            "features": [
+              {
+                "end": 1800,
+                "score": null,
+                "is_plus_strand": true,
+                "start_is_biological_start": true,
+                "start": 1599,
+                "phase": 0,
+                "is_fully_contained": true,
+                "given_name": "y4",
+                "id": 15,
+                "protein_id": null,
+                "type": "geenuff_transcript",
+                "end_is_biological_end": true,
+                "overlaps": true,
+                "source": "manual"
+              },
+              {
+                "end": 1795,
+                "score": null,
+                "is_plus_strand": true,
+                "start_is_biological_start": false,
+                "start": 1619,
+                "phase": 0,
+                "is_fully_contained": true,
+                "given_name": null,
+                "id": 16,
+                "protein_id": "y4",
+                "type": "geenuff_cds",
+                "end_is_biological_end": true,
+                "overlaps": true,
+                "source": "manual"
+              },
+              {
+                "end": 1780,
+                "score": null,
+                "is_plus_strand": true,
+                "start_is_biological_start": true,
+                "start": 1700,
+                "phase": 0,
+                "is_fully_contained": true,
+                "given_name": null,
+                "id": 17,
+                "protein_id": null,
+                "type": "geenuff_intron",
+                "end_is_biological_end": true,
+                "overlaps": true,
+                "source": "manual"
+              }
+            ],
+            "type": "mRNA",
+            "id": 7,
+            "overlaps": true,
+            "given_name": "y4"
+          }
+        ],
+        "type": "gene",
+        "id": 4,
+        "overlaps": true,
+        "given_name": "gene_no_ATG"
+      }
+    ],
+    "coordinate_piece": {
+      "seqid": "1",
+      "end": 1801,
+      "sequence": "NNNNNNNNNNATGNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNTAGNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNTGANNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNATGNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNTAANNNNNN",
+      "id": 1,
+      "start": 0
+    }
+  }
+]
