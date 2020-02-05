@@ -1,3 +1,10 @@
+from geenuff.base import types
+
+
+class NotGeenuffDeserializableException(Exception):
+    pass
+
+
 class Transcript:
     @classmethod
     def from_dct(cls, dct):
@@ -23,7 +30,6 @@ class Transcript:
         self.id = id
         self.overlaps = overlaps
         self.given_name = given_name
-    # todo: classmethods for overloading
 
 
 class SuperLocus:
@@ -54,12 +60,28 @@ class SuperLocus:
 
 
 class CoordinatePiece:
+    @classmethod
+    def from_dct(cls, dct):
+        return CoordinatePiece(
+            seqid=dct["seqid"],
+            id=dct["id"],
+            sequence=dct["sequence"],
+            start=dct["start"],
+            end=dct["end"])
+
     def __init__(self, seqid, id, sequence, start, end):
         self.seqid = seqid
         self.id = id
         self.sequence = sequence
         self.start = start
         self.end = end
+
+    def __repr__(self):
+        try:
+            return "seqid:{},id:{},sequence:{}...{},start:{},end:{}".format(self.seqid, self.id, self.sequence[:6], self.sequence[-6:], self.start, self.end)
+        except Exception as e:
+            print(e)
+            return "seqid:{},id:{},sequence:...,start:{},end:{}".format(self.seqid, self.id, self.start, self.end)
 
 
 class Feature:
@@ -84,6 +106,9 @@ class Feature:
 
     def __init__(self, end, score, is_plus_strand, start_is_biological_start, start, phase, is_fully_contained,
                  given_name, id, protein_id, type, end_is_biological_end, overlaps, source):
+        if type not in [t.value for t in types.GeenuffFeature]:
+            raise NotGeenuffDeserializableException
+
         self.end = end
         self.score = score
         self.is_plus_strand = is_plus_strand
@@ -103,4 +128,38 @@ class Feature:
         return "{},{},{}".format(self.start, self.end, self.type)
 
 
+class GeenuffCollection:
+    @classmethod
+    def from_dct(cls, dct):
+        def _init_super_loci():
+            print(dct)
+            super_loci = dct["super_loci"]
+            res = []
+            for sl in super_loci:
+                res.append(SuperLocus.from_dct(sl))
+            return res
+
+        return cls(
+            super_loci=_init_super_loci(),
+            coordinate_piece=CoordinatePiece.from_dct(dct=dct["coordinate_piece"])
+        )
+
+    @classmethod
+    def from_dct(cls, dct):
+        def _init_super_loci():
+            #print(dct)
+            super_loci = dct["super_loci"]
+            res = []
+            for sl in super_loci:
+                res.append(SuperLocus.from_dct(sl))
+            return res
+
+        return cls(
+            super_loci=_init_super_loci(),
+            coordinate_piece=CoordinatePiece.from_dct(dct=dct["coordinate_piece"])
+        )
+
+    def __init__(self, super_loci, coordinate_piece):
+        self.super_loci = super_loci
+        self.coordinate_piece = coordinate_piece
 
