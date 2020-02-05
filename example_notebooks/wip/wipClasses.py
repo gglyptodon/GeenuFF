@@ -27,6 +27,23 @@ class Transcript:
 
 
 class SuperLocus:
+    @classmethod
+    def from_dct(cls, dct):
+        def _init_transcripts():
+            transcripts = dct["transcripts"]
+            res = []
+            for t in transcripts:
+                res.append(Transcript.from_dct(t))
+            return res
+        return cls(
+            is_fully_contained=dct["is_fully_contained"],
+            given_name=dct["given_name"],
+            id=dct["id"],
+            type=dct["type"],
+            overlaps=dct["overlaps"],
+            transcripts=_init_transcripts()
+        )
+
     def __init__(self, is_fully_contained=None, transcripts=None, type=None, id=None, overlaps=None, given_name=None):
         self.is_fully_contained = is_fully_contained
         self.transcripts = transcripts
