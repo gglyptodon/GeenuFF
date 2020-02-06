@@ -200,9 +200,18 @@ class DrawableSuperLocus:
         self.super_locus = super_locus
         self.coordinate_piece = coordinate_piece
         self.graphic_features = []
+        self.pos_min = float('inf')
+        self.pos_max = float('-inf')
         try:
             for t in self.super_locus.transcripts:
                 for feature in t.features:
+                    if feature.start < self.pos_min:
+                        print("updated min:", self.pos_min, feature.start)
+                        self.pos_min = feature.start
+                    if feature.end > self.pos_max:
+                        print("updated max:", self.pos_max, feature.end)
+                        self.pos_max = feature.end
+
                     if feature.type in ['geenuff_transcript']:
                         self.graphic_features.append(
                             GraphicFeature(
@@ -228,7 +237,11 @@ class DrawableSuperLocus:
     def draw(self, zoom_coordinates=None, save_to=None):
         """zoom_coordinates expects a tuple (start,end)"""
         if zoom_coordinates is None:
-            GraphicRecord(features=self.graphic_features, sequence=self.coordinate_piece.sequence).plot(figure_width=10)
+            #print(self.coordinate_piece.sequence[self.pos_min:self.pos_max], self.pos_min, self.pos_max)
+
+            #GraphicRecord(features=self.graphic_features, sequence=self.coordinate_piece.sequence, sequence_length=500).plot(figure_width=10)
+            GraphicRecord(features=self.graphic_features, sequence=self.coordinate_piece.sequence[self.pos_min:self.pos_max], first_index=self.pos_min).plot(figure_width=10)
+
         else:
             record = GraphicRecord(features=self.graphic_features, sequence=self.coordinate_piece.sequence)
             zoom_start, zoom_end = zoom_coordinates
