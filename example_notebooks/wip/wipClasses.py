@@ -194,10 +194,11 @@ class DrawableSuperLocus:
         try:
             for t in self.super_locus.transcripts:
                 for feature in t.features:
-                    if feature.type in ['geenuff_intron']:
+                    #if feature.type in ['geenuff_intron']:
                         # print("intron not added", feature)
-                        pass
-                    elif feature.type in ['geenuff_transcript']:
+                    #    pass
+
+                    if feature.type in ['geenuff_transcript']:
                         self.graphic_features.append(
                             GraphicFeature(
                                 start=feature.start,
