@@ -165,6 +165,16 @@ class GeenuffCollection:
         self.super_loci = super_loci
         self.coordinate_piece = coordinate_piece
 
+    def get_filtered_by_type(self, geenuff_types):  # TODO
+        """for debugging, naive approach"""
+        res = []
+        for sl in self.super_loci:
+            for t in sl.transcripts:
+                for f in t.features:
+                    if f.type in geenuff_types:
+                        res.append(sl)
+        return set(res)
+
 
 def color(geenuff_feature_name):
     valid = [t.value for t in types.GeenuffFeature]
@@ -206,10 +216,8 @@ class DrawableSuperLocus:
             for t in self.super_locus.transcripts:
                 for feature in t.features:
                     if feature.start < self.pos_min:
-                        print("updated min:", self.pos_min, feature.start)
                         self.pos_min = feature.start
                     if feature.end > self.pos_max:
-                        print("updated max:", self.pos_max, feature.end)
                         self.pos_max = feature.end
 
                     if feature.type in ['geenuff_transcript']:
@@ -238,16 +246,27 @@ class DrawableSuperLocus:
         """zoom_coordinates expects a tuple (start,end)"""
         if zoom_coordinates is None:
             #print(self.coordinate_piece.sequence[self.pos_min:self.pos_max], self.pos_min, self.pos_max)
-
             #GraphicRecord(features=self.graphic_features, sequence=self.coordinate_piece.sequence, sequence_length=500).plot(figure_width=10)
-            GraphicRecord(features=self.graphic_features, sequence=self.coordinate_piece.sequence[self.pos_min:self.pos_max], first_index=self.pos_min).plot(figure_width=10)
-
+            gr = GraphicRecord(features=self.graphic_features, sequence=self.coordinate_piece.sequence[self.pos_min:self.pos_max], first_index=self.pos_min)
+            gr.plot(figure_width=10)
+            if save_to:
+                print("saving to {}".format(save_to))
+                if save_to.endswith(DrawableExtensions.ALLOWED_EXTENSIONS):
+                    try:
+                        ax, _ = gr.plot(figure_width=15)
+                        ax.figure.savefig(save_to)#, bbox_inches='tight')
+                    except Exception as e:
+                        print(e)
+                        raise Exception
+                else:
+                    raise InvalidFileExtensionException(
+                        "Valid file extensions are: {}".format(",".join(DrawableExtensions.ALLOWED_EXTENSIONS)))
         else:
-            record = GraphicRecord(features=self.graphic_features, sequence=self.coordinate_piece.sequence)
+            record = GraphicRecord(features=self.graphic_features, sequence=self.coordinate_piece.sequence[self.pos_min:self.pos_max], first_index=self.pos_min)
             zoom_start, zoom_end = zoom_coordinates
             cropped_record = record.crop((zoom_start, zoom_end))
             fig, (ax1, ax2) = plt.pyplot.subplots(1, 2, figsize=(14, 2)) #todo: this is weird
-            ax1.set_title("Whole sequence Superlocus " + str(self.super_locus.given_name), loc='left', weight='bold')
+            ax1.set_title("Superlocus " + str(self.super_locus.given_name), loc='left', weight='bold')
             record.plot(ax=ax1)
             cropped_record.plot_translation(ax=ax2, location=(400, 400), fontdict={'weight': 'bold'})
             cropped_record.plot(ax=ax2, plot_sequence=True)
