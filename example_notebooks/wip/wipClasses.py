@@ -1,10 +1,19 @@
 import matplotlib as plt
+from matplotlib.pyplot import subplots
 
 from geenuff.base import types
 from dna_features_viewer import GraphicFeature, GraphicRecord
 
 
 class NotGeenuffDeserializableException(Exception):
+    pass
+
+
+class DrawableExtensions:
+    ALLOWED_EXTENSIONS = ('.png', '.jpg', '.pdf', '.svg')
+
+
+class InvalidFileExtensionException(Exception):
     pass
 
 
@@ -159,7 +168,7 @@ class GeenuffCollection:
 
 def color(geenuff_feature_name):
     valid = [t.value for t in types.GeenuffFeature]
-    if not geenuff_feature_name in valid:
+    if geenuff_feature_name not in valid:
         raise Exception("{} is not a valid GeenuffFeature name".format(geenuff_feature_name))
     colmap = {
         'geenuff_transcript': '#00bfff',
@@ -194,17 +203,14 @@ class DrawableSuperLocus:
         try:
             for t in self.super_locus.transcripts:
                 for feature in t.features:
-                    #if feature.type in ['geenuff_intron']:
-                        # print("intron not added", feature)
-                    #    pass
-
                     if feature.type in ['geenuff_transcript']:
                         self.graphic_features.append(
                             GraphicFeature(
                                 start=feature.start,
                                 end=feature.end,
                                 strand=convert_strand_info(feature.is_plus_strand),
-                                color=color(feature.type), label=feature.given_name),
+                                color=color(feature.type), label=t.given_name),
+
                         )
                     else:
                         self.graphic_features.append(
@@ -212,15 +218,14 @@ class DrawableSuperLocus:
                                 start=feature.start,
                                 end=feature.end,
                                 strand=convert_strand_info(feature.is_plus_strand),
-                                color=color(feature.type), label=feature.type),
+                                color=color(feature.type), label=t.given_name),
                         )
                 self.graphic_record = GraphicRecord(sequence=coordinate_piece.sequence, features=self.graphic_features)
         except Exception as e:
             print(e)
             raise Exception  # todo: Exception anticipation and handling
 
-    def draw(self, zoom_coordinates=None):
-        from matplotlib.pyplot import subplots
+    def draw(self, zoom_coordinates=None, save_to=None):
         """zoom_coordinates expects a tuple (start,end)"""
         if zoom_coordinates is None:
             GraphicRecord(features=self.graphic_features, sequence=self.coordinate_piece.sequence).plot(figure_width=10)
@@ -234,11 +239,20 @@ class DrawableSuperLocus:
             cropped_record.plot_translation(ax=ax2, location=(400, 400), fontdict={'weight': 'bold'})
             cropped_record.plot(ax=ax2, plot_sequence=True)
             ax2.set_title("Sequence detail " + str(self.super_locus.given_name), loc='left', weight='bold')
-            #
+            if save_to:
+                print("saving to {}".format(save_to))
+                if save_to.endswith(DrawableExtensions.ALLOWED_EXTENSIONS):
+                    try:
+                        fig.savefig(save_to, bbox_inches='tight')
+                    except Exception as e:
+                        print(e)
+                        raise Exception
+                else:
+                    raise InvalidFileExtensionException(
+                        "Valid file extensions are: {}".format(",".join(DrawableExtensions.ALLOWED_EXTENSIONS)))
 
 
 class DrawableGeenuffCollection:
-
     def __init__(self, list_of_drawable_super_loci, coordinate_piece):
         def _init_graphic_features():
             res = []
@@ -249,10 +263,7 @@ class DrawableGeenuffCollection:
         self.coordinate_piece = coordinate_piece
         self.graphic_features = _init_graphic_features()
 
-    def draw(self, zoom_coordinates=None):
-        #print(self.graphic_features)
-
-        from matplotlib.pyplot import subplots
+    def draw(self, zoom_coordinates=None, save_to=None):
         """zoom_coordinates expects a tuple (start,end)"""
         if zoom_coordinates is None:
             GraphicRecord(features=self.graphic_features, sequence=self.coordinate_piece.sequence).plot(figure_width=10)
@@ -261,12 +272,25 @@ class DrawableGeenuffCollection:
             zoom_start, zoom_end = zoom_coordinates
             cropped_record = record.crop((zoom_start, zoom_end))
             fig, (ax1, ax2) = plt.pyplot.subplots(1, 2, figsize=(14, 2)) #todo: this is weird
-            ax1.set_title("Whole sequence Superlocus " + str(self.super_locus.given_name), loc='left', weight='bold')
+            ax1.set_title("", loc='left', weight='bold') #+ str(self.super_locus.given_name), loc='left', weight='bold')
+
             record.plot(ax=ax1)
             cropped_record.plot_translation(ax=ax2, location=(400, 400), fontdict={'weight': 'bold'})
             cropped_record.plot(ax=ax2, plot_sequence=True)
-            ax2.set_title("Sequence detail " + str(self.super_locus.given_name), loc='left', weight='bold')
-            #
+            ax2.set_title("Sequence detail ", loc='left', weight='bold') #str(self.super_locus.given_name),
+            if save_to:
+                print("saving to {}".format(save_to))
+                if save_to.endswith(DrawableExtensions.ALLOWED_EXTENSIONS):
+                    try:
+                        fig.savefig(save_to, bbox_inches='tight')
+                    except Exception as e:
+                        print(e)
+                        raise Exception
+                else:
+                    raise InvalidFileExtensionException(
+                        "Valid file extensions are: {}".format(",".join(DrawableExtensions.ALLOWED_EXTENSIONS)))
+
+
 
 
 #
