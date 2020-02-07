@@ -266,13 +266,13 @@ class DrawableSuperLocus:
         """zoom_coordinates expects a tuple (start,end)"""
         if zoom_coordinates is None:
             gr = GraphicRecord(features=self.graphic_features, sequence=self.coordinate_piece.sequence[self.pos_min:self.pos_max], first_index=self.pos_min)
-            gr.plot(**kwargs)
+            ax, _ = gr.plot(**kwargs)
             if save_to:
                 print("saving to {}".format(save_to))
                 if save_to.endswith(DrawableExtensions.ALLOWED_EXTENSIONS):
                     try:
-                        ax, _ = gr.plot(**kwargs)#figure_width=15)
-                        ax.figure.savefig(save_to)#, bbox_inches='tight')
+                        #gr.plot(**kwargs)#figure_width=15)
+                        ax.figure.savefig(save_to, bbox_inches='tight')
                     except Exception as e:
                         print(e)
                         raise Exception
@@ -281,20 +281,19 @@ class DrawableSuperLocus:
                         "Valid file extensions are: {}".format(",".join(DrawableExtensions.ALLOWED_EXTENSIONS)))
         else:
             record = GraphicRecord(features=self.graphic_features, sequence=self.coordinate_piece.sequence[self.pos_min:self.pos_max], first_index=self.pos_min)
-            zoom_start, zoom_end = zoom_coordinates
-            cropped_record = record.crop((zoom_start, zoom_end))
+            cropped_record = record.crop(zoom_coordinates)
             #fig, (ax1, ax2) = plt.pyplot.subplots(1, 2, figsize=(14, 2)) #todo: this is weird
             #ax1.set_title("Superlocus " + str(self.super_locus.given_name), loc='left', weight='bold')
             #record.plot(ax=ax1)
             #cropped_record.plot_translation(ax=ax2, location=(400, 400), fontdict={'weight': 'bold'})
-            cropped_record.plot(plot_sequence=True, **kwargs)
+            ax, _ = cropped_record.plot(plot_sequence=True, **kwargs)
             #ax2.set_title("Sequence detail " + str(self.super_locus.given_name), loc='left', weight='bold')
             if save_to:
                 print("saving to {}".format(save_to))
                 if save_to.endswith(DrawableExtensions.ALLOWED_EXTENSIONS):
                     try:
-                        ax, _ = cropped_record.plot(**kwargs)#figure_width=15)
-                        ax.figure.savefig(save_to)#, bbox_inches='tight')
+                        #ax, _ = cropped_record.plot(plot_sequence=True, **kwargs)#figure_width=15)
+                        ax.figure.savefig(save_to, bbox_inches='tight')
                     except Exception as e:
                         print(e)
                         raise Exception
