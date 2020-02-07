@@ -5,6 +5,16 @@ from geenuff.base import types
 from dna_features_viewer import GraphicFeature, GraphicRecord
 
 
+def dummy_repr(obj): # todo
+    res = "{}".format(obj.__class__)
+    for it in zip(obj.__dict__.keys(), obj.__dict__.values()):
+        if it[0] in ["features", "transcripts"]:
+            res += "[...]"
+        else:
+            res += str(it)
+    return res
+
+
 class NotGeenuffDeserializableException(Exception):
     pass
 
@@ -44,6 +54,9 @@ class Transcript:
         self.overlaps = overlaps
         self.given_name = given_name
 
+    def __repr__(self):
+        return dummy_repr(self)
+
 
 class SuperLocus:
     """ todo: docstr"""
@@ -72,6 +85,9 @@ class SuperLocus:
         self.overlaps = overlaps
         self.given_name = given_name
 
+    def __repr__(self):
+        return dummy_repr(self)
+
 
 class CoordinatePiece:
     """ todo: docstr"""
@@ -92,11 +108,13 @@ class CoordinatePiece:
         self.end = end
 
     def __repr__(self):
+        res = "{}".format(self.__class__)
         try:
-            return "seqid:{},id:{},sequence:{}...{},start:{},end:{}".format(self.seqid, self.id, self.sequence[:6], self.sequence[-6:], self.start, self.end)
+            res += "seqid:{},id:{},sequence:{}...{},start:{},end:{}".format(self.seqid, self.id, self.sequence[:6], self.sequence[-6:], self.start, self.end)
         except Exception as e:
             print(e)
-            return "seqid:{},id:{},sequence:...,start:{},end:{}".format(self.seqid, self.id, self.start, self.end)
+            res += "seqid:{},id:{},sequence:...,start:{},end:{}".format(self.seqid, self.id, self.start, self.end)
+        return res
 
 
 class Feature:
@@ -141,7 +159,7 @@ class Feature:
         self.source = source
 
     def __repr__(self):
-        return "{},{},{}".format(self.start, self.end, self.type)
+        return dummy_repr(self)
 
 
 class GeenuffCollection:
@@ -149,7 +167,6 @@ class GeenuffCollection:
     @classmethod
     def from_dct(cls, dct):
         def _init_super_loci():
-            #print(dct)
             super_loci = dct["super_loci"]
             res = []
             for sl in super_loci:
@@ -174,6 +191,9 @@ class GeenuffCollection:
                     if f.type in geenuff_types:
                         res.append(sl)
         return set(res)
+
+    def __repr__(self):
+        return dummy_repr(self)
 
 
 def color(geenuff_feature_name):
@@ -242,18 +262,16 @@ class DrawableSuperLocus:
             print(e)
             raise Exception  # todo: Exception anticipation and handling
 
-    def draw(self, zoom_coordinates=None, save_to=None):
+    def draw(self, zoom_coordinates=None, save_to=None, **kwargs):
         """zoom_coordinates expects a tuple (start,end)"""
         if zoom_coordinates is None:
-            #print(self.coordinate_piece.sequence[self.pos_min:self.pos_max], self.pos_min, self.pos_max)
-            #GraphicRecord(features=self.graphic_features, sequence=self.coordinate_piece.sequence, sequence_length=500).plot(figure_width=10)
             gr = GraphicRecord(features=self.graphic_features, sequence=self.coordinate_piece.sequence[self.pos_min:self.pos_max], first_index=self.pos_min)
-            gr.plot(figure_width=10)
+            gr.plot(**kwargs)
             if save_to:
                 print("saving to {}".format(save_to))
                 if save_to.endswith(DrawableExtensions.ALLOWED_EXTENSIONS):
                     try:
-                        ax, _ = gr.plot(figure_width=15)
+                        ax, _ = gr.plot(**kwargs)#figure_width=15)
                         ax.figure.savefig(save_to)#, bbox_inches='tight')
                     except Exception as e:
                         print(e)
@@ -265,23 +283,27 @@ class DrawableSuperLocus:
             record = GraphicRecord(features=self.graphic_features, sequence=self.coordinate_piece.sequence[self.pos_min:self.pos_max], first_index=self.pos_min)
             zoom_start, zoom_end = zoom_coordinates
             cropped_record = record.crop((zoom_start, zoom_end))
-            fig, (ax1, ax2) = plt.pyplot.subplots(1, 2, figsize=(14, 2)) #todo: this is weird
-            ax1.set_title("Superlocus " + str(self.super_locus.given_name), loc='left', weight='bold')
-            record.plot(ax=ax1)
-            cropped_record.plot_translation(ax=ax2, location=(400, 400), fontdict={'weight': 'bold'})
-            cropped_record.plot(ax=ax2, plot_sequence=True)
-            ax2.set_title("Sequence detail " + str(self.super_locus.given_name), loc='left', weight='bold')
+            #fig, (ax1, ax2) = plt.pyplot.subplots(1, 2, figsize=(14, 2)) #todo: this is weird
+            #ax1.set_title("Superlocus " + str(self.super_locus.given_name), loc='left', weight='bold')
+            #record.plot(ax=ax1)
+            #cropped_record.plot_translation(ax=ax2, location=(400, 400), fontdict={'weight': 'bold'})
+            cropped_record.plot(plot_sequence=True, **kwargs)
+            #ax2.set_title("Sequence detail " + str(self.super_locus.given_name), loc='left', weight='bold')
             if save_to:
                 print("saving to {}".format(save_to))
                 if save_to.endswith(DrawableExtensions.ALLOWED_EXTENSIONS):
                     try:
-                        fig.savefig(save_to, bbox_inches='tight')
+                        ax, _ = cropped_record.plot(**kwargs)#figure_width=15)
+                        ax.figure.savefig(save_to)#, bbox_inches='tight')
                     except Exception as e:
                         print(e)
                         raise Exception
                 else:
                     raise InvalidFileExtensionException(
                         "Valid file extensions are: {}".format(",".join(DrawableExtensions.ALLOWED_EXTENSIONS)))
+
+    def __repr__(self):
+        dummy_repr(self)
 
 
 class DrawableGeenuffCollection:
@@ -322,61 +344,6 @@ class DrawableGeenuffCollection:
                     raise InvalidFileExtensionException(
                         "Valid file extensions are: {}".format(",".join(DrawableExtensions.ALLOWED_EXTENSIONS)))
 
-
-
-
-#
-# def plot_superloci(data, zoom_coords_dict_by_superloc_id=None, plot_separately=True, output_directory=".",
-#                    output_prefix="tmp_"):
-#     for item in data:
-#         super_loci = item['super_loci']
-#         coordinate_piece = item['coordinate_piece']
-#
-#         # for vis:
-#         seq = coordinate_piece['sequence']
-#         features = []
-#         for sl in super_loci:
-#             if plot_separately:
-#                 features = []
-#
-#             sl_transcripts = sl['transcripts']
-#             for sl_t in sl_transcripts:
-#                 for feature in sl_t["features"]:
-#                     # print(feature['is_plus_strand'])
-#                     if feature['type'] in ['geenuff_intron']:
-#                         pass
-#                     elif feature['type'] in ['geenuff_transcript']:
-#                         features.append(
-#                             GraphicFeature(
-#                                 start=feature["start"],
-#                                 end=feature["end"],
-#                                 strand=convert_strand_info(feature['is_plus_strand']),  # todo
-#                                 color=color(feature['type']), label=feature['given_name']),
-#                         )
-#                     else:
-#                         features.append(
-#                             GraphicFeature(
-#                                 start=feature["start"],
-#                                 end=feature["end"],
-#                                 strand=convert_strand_info(feature['is_plus_strand']),  # todo
-#                                 color=color(feature['type']), label=feature['type']),
-#                         )
-#             record = GraphicRecord(sequence=seq, features=features)
-#             if zoom_coords_dict_by_superloc_id:
-#                 zoom = zoom_coords_dict_by_superloc_id
-#                 zoom_start, zoom_end = zoom[str(sl["id"])]  # coordinates of the "detail"
-#                 cropped_record = record.crop((zoom_start, zoom_end))
-#                 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 2))
-#                 ax1.set_title("Whole sequence Superlocus " + str(sl["id"]), loc='left', weight='bold')
-#                 record.plot(ax=ax1)
-#
-#                 cropped_record.plot_translation(ax=ax2, location=(400, 400),
-#                                                 fontdict={'weight': 'bold'})
-#                 cropped_record.plot(ax=ax2, plot_sequence=True)
-#                 ax2.set_title("Sequence detail", loc='left', weight='bold')
-#
-#                 fig.savefig(output_prefix + str(sl["id"]) + '.png', bbox_inches='tight')
-#             else:
-#                 pass
-#
+    def __repr__(self):
+        dummy_repr(self)
 
