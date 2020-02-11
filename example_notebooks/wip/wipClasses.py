@@ -4,6 +4,9 @@ from matplotlib.pyplot import subplots
 from geenuff.base import types
 from dna_features_viewer import GraphicFeature, GraphicRecord
 
+import ipywidgets as widgets
+from ipywidgets import Layout
+
 
 def dummy_repr(obj): # todo
     res = "{}".format(obj.__class__)
@@ -192,6 +195,16 @@ class GeenuffCollection:
                         res.append(sl)
         return set(res)
 
+    def get_filtered_by_given_name(self, given_name):  # TODO
+        """for debugging, naive approach"""
+        res = []
+        for sl in self.super_loci:
+            for t in sl.transcripts:
+                for f in t.features:
+                    if f.given_name in given_name:
+                        res.append(sl)
+        return set(res)
+
     def __repr__(self):
         return dummy_repr(self)
 
@@ -226,6 +239,26 @@ def convert_strand_info(geenuff_is_plus_strand):  # todo
 
 
 class DrawableSuperLocus:
+    @classmethod
+    def filter_by_given_name(cls, super_locus, coordinate_piece, given_names): # todo: under construction
+        #print("called")
+        new_transcripts = []
+        for t in super_locus.transcripts:
+            if t.given_name not in given_names:
+                pass
+                # print("filtered out {}".format(t.given_name))
+            else:
+                new_transcripts.append(t)
+                # print("appended {}".format(t.given_name))
+
+        return cls(super_locus=SuperLocus(is_fully_contained=super_locus.is_fully_contained,
+                                          transcripts=new_transcripts,
+                                          type=super_locus.type,
+                                          id=super_locus.id,
+                                          overlaps=super_locus.overlaps,
+                                          given_name=super_locus.given_name),
+                   coordinate_piece=coordinate_piece)
+
     def __init__(self, super_locus, coordinate_piece):
         self.super_locus = super_locus
         self.coordinate_piece = coordinate_piece
@@ -302,7 +335,7 @@ class DrawableSuperLocus:
                         "Valid file extensions are: {}".format(",".join(DrawableExtensions.ALLOWED_EXTENSIONS)))
 
     def __repr__(self):
-        dummy_repr(self)
+        return dummy_repr(self)
 
 
 class DrawableGeenuffCollection:
@@ -346,3 +379,53 @@ class DrawableGeenuffCollection:
     def __repr__(self):
         dummy_repr(self)
 
+
+class DummyWidget:
+
+    def __init__(self, drawableLocus):
+        valid = [t.value for t in types.GeenuffFeature]
+        t = [e.given_name for e in drawableLocus.super_locus.transcripts]
+        self.menu = widgets.Dropdown(
+            options=t,
+            value=t[0],
+            description='Transcripts:')
+
+        self.zoom_slider = widgets.IntRangeSlider(
+            value=[drawableLocus.pos_min, drawableLocus.pos_max],
+            min=drawableLocus.pos_min,
+            max=drawableLocus.pos_max,
+            step=1,
+            description='Zoom Pos:',
+            disabled=False,
+            continuous_update=False,
+            orientation='horizontal',
+            readout=True,
+            readout_format='d',
+            layout=Layout(width='50%', height='80px')
+        )
+        self.button = widgets.Button(description='Plot')
+        self.out = widgets.Output()
+
+        def on_button_clicked(_):
+            result = []
+            # "linking function with output"
+            with self.out:
+                # what happens when we press the button
+                self.out.clear_output()
+               # print(self.menu.value)
+                res = DrawableSuperLocus.filter_by_given_name(super_locus=drawableLocus.super_locus,
+                                                              coordinate_piece=drawableLocus.coordinate_piece,
+                                                              given_names=[self.menu.value])
+                #print(res)
+                with self.out:
+                    #print("sth", res)
+                    res.draw(zoom_coordinates=self.zoom_slider.value)
+                    #drawableLocus.draw(zoom_coordinates=self.zoom_slider.value)
+                    #DrawableSuperLocus(r).draw()
+
+        self.button.on_click(on_button_clicked)
+
+        self.box = widgets.VBox([self.zoom_slider, self.menu, self.button, self.out])
+
+    def display(self):
+        return self.box
