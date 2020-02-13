@@ -164,29 +164,16 @@ class GeenuffCollection:
             coordinate_piece=CoordinatePiece.from_dct(dct=dct["coordinate_piece"])
         )
 
+    @classmethod
+    def from_set(cls, st, coordinate_piece):
+        tmp = []
+        for s in st:
+            tmp.append(s)
+        return cls(super_loci=tmp, coordinate_piece=coordinate_piece)
+
     def __init__(self, super_loci, coordinate_piece):
         self.super_loci = super_loci
         self.coordinate_piece = coordinate_piece
-
-    # def get_filtered_by_type(self, geenuff_types):  # TODO
-    #     """for debugging, naive approach"""
-    #     res = []
-    #     for sl in self.super_loci:
-    #         for t in sl.transcripts:
-    #             for f in t.features:
-    #                 if f.type in geenuff_types:
-    #                     res.append(sl)
-    #     return set(res)
-    #
-    # def get_filtered_by_given_name(self, given_name):  # TODO
-    #     """for debugging, naive approach"""
-    #     res = []
-    #     for sl in self.super_loci:
-    #         for t in sl.transcripts:
-    #             for f in t.features:
-    #                 if f.given_name in given_name:
-    #                     res.append(sl)
-    #     return set(res)
 
     def __repr__(self):
         return _repr(self)
@@ -212,11 +199,16 @@ def _get_filter(filter_by):
 def _filter_by_given_name(collection, to_match):
     res = []
     for sl in collection.super_loci:
+        if sl.given_name in to_match:
+            # print(sl) # todo
+            res.append(sl)
         for t in sl.transcripts:
             for f in t.features:
                 if f.given_name in to_match:
                     res.append(sl)
-    return set(res)
+    #return set(res)
+    #print("res:",res)
+    return GeenuffCollection.from_set(set(res), coordinate_piece=collection.coordinate_piece)
 
 
 def _filter_by_feature_type(collection, to_match):
@@ -231,7 +223,7 @@ def _filter_by_feature_type(collection, to_match):
             for f in t.features:
                 if f.type in to_match:
                     res.append(sl)
-    return set(res)
+    return GeenuffCollection.from_set(set(res), coordinate_piece=collection.coordinate_piece)
 
 
 

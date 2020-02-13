@@ -147,8 +147,9 @@ class DrawableGeenuffCollection:
     @classmethod
     def from_geenuff_collection(cls, geenuff_collection):
         tmp = []
-        for sl in geenuff_collection:
+        for sl in geenuff_collection.super_loci:
             tmp.append(DrawableSuperLocus(super_locus=sl, coordinate_piece=geenuff_collection.coordinate_piece))
+        #print(tmp)
         return cls(list_of_drawable_super_loci=tmp, coordinate_piece=geenuff_collection.coordinate_piece)
 
     @classmethod
@@ -159,6 +160,7 @@ class DrawableGeenuffCollection:
         return cls(list_of_drawable_super_loci=tmp, coordinate_piece=coordinate_piece)
 
     def __init__(self, list_of_drawable_super_loci, coordinate_piece):
+
         def _init_graphic_features():
             res = []
             for sl in list_of_drawable_super_loci:
@@ -168,13 +170,21 @@ class DrawableGeenuffCollection:
         self.coordinate_piece = coordinate_piece
         self.drawable_super_loci = list_of_drawable_super_loci
         self.graphic_features = _init_graphic_features()
+        self.pos_min = float('inf')
+        self.pos_max = float('-inf')
+        for d in list_of_drawable_super_loci:
+            if d.pos_min < self.pos_min:
+                self.pos_min = d.pos_min
+            if d.pos_max > self.pos_max:
+                self.pos_max = d.pos_max
+
 
     def draw(self, zoom_coordinates=None, save_to=None):
         """zoom_coordinates expects a tuple (start,end)"""
         if zoom_coordinates is None:
-            GraphicRecord(features=self.graphic_features, sequence=self.coordinate_piece.sequence).plot(figure_width=10)
+            GraphicRecord(features=self.graphic_features, sequence=self.coordinate_piece.sequence[self.pos_min:self.pos_max], first_index=self.pos_min).plot(figure_width=10)
         else:
-            record = GraphicRecord(features=self.graphic_features, sequence=self.coordinate_piece.sequence)
+            record = GraphicRecord(features=self.graphic_features, sequence=self.coordinate_piece.sequence[self.pos_min:self.pos_max],first_index=self.pos_min)
             zoom_start, zoom_end = zoom_coordinates
             cropped_record = record.crop((zoom_start, zoom_end))
             fig, (ax1, ax2) = plt.pyplot.subplots(1, 2, figsize=(14, 2)) #todo: this is weird
@@ -197,5 +207,5 @@ class DrawableGeenuffCollection:
                         "Valid file extensions are: {}".format(",".join(DrawableExtensions.ALLOWED_EXTENSIONS)))
 
     def __repr__(self):
-        _repr(self)
+        return _repr(self)
 

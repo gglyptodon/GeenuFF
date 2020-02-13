@@ -5,7 +5,42 @@ from ipywidgets import Layout
 
 from geenuff.base import types
 
-from .wipDrawableClasses import DrawableSuperLocus
+from .wipDrawableClasses import DrawableSuperLocus, DrawableGeenuffCollection
+from .wipClasses import GeenuffCollectionFilter
+
+
+class OverviewWidget:
+
+    def __init__(self, collection):
+        _opts = [i.given_name for i in collection.super_loci]
+
+        self.selectwidget = widgets.SelectMultiple(
+            options=_opts,
+            value=(),
+            # rows=10,
+            description='Superloci:',
+            disabled=False
+        )
+
+        def _on_button_clicked(_):
+            res = GeenuffCollectionFilter.filter(collection, filter_by='given_name', to_match=self.selectwidget.value)
+            #print(res)
+            #for r in res.super_loci:
+                #print(r)
+            #    DrawableSuperLocus(
+            #        super_locus=r, coordinate_piece=collection.coordinate_piece
+            #    ).draw()
+            DrawableGeenuffCollection.from_geenuff_collection(res).draw()
+            #print(res)
+            #res.draw()
+
+        self.button = widgets.Button(description='Show')
+        self.button.on_click(_on_button_clicked)
+        self.container = widgets.VBox([self.selectwidget, self.button])
+
+    def display(self):
+        return self.container
+
 
 
 class DummyWidget:
